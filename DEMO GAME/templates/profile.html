@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %} - Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Profile</h2>
+    <h4 class="mt-4">Your Rated Games</h4>
+    
+    {% if not rated_games %}
+        <p>You haven't rated any games yet.</p>
+    {% else %}
+        <div class="row">
+            {% for game in rated_games %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <img src="{{ game[3] }}" class="card-img-top" alt="{{ game[2] }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ game[2] }}</h5>
+                        <div class="rating-stars">
+                            {% for i in range(5) %}
+                                {% if i < game[1] %}
+                                    <span class="text-warning">★</span>
+                                {% else %}
+                                    <span class="text-secondary">★</span>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ms-1">{{ game[1] }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <a href="{{ url_for('game_detail', game_id=game[0]) }}" class="btn btn-sm btn-outline-primary">View</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

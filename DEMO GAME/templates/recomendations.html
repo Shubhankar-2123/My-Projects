@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="recommendations">
+        <h2>Recommended Games for User {{ user_id }}</h2>
+        
+        <div class="game-grid">
+            {% for game in games %}
+                <div class="game-card">
+                    <h3>{{ game.title }}</h3>
+                    <div class="game-details">
+                        <p><strong>Genre:</strong> {{ game.genre }}</p>
+                        <p><strong>Rating:</strong> {{ game.rating }}/10</p>
+                        <p><strong>Tags:</strong> {{ game.tags }}</p>
+                    </div>
+                    <a href="{{ url_for('game_details', game_id=game.game_id) }}" class="btn">View Details</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

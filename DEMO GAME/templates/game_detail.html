@@ -1,0 +1,24 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="game-detail">
+  <img src="{{ game['Icon URL'] }}" alt="{{ game.Name }}">
+  <h2>{{ game.Name }}</h2>
+  <div class="rating">★ {{ game['Average User Rating'] }}</div>
+  <p>{{ game.Description }}</p>
+  
+  <form method="post" action="{{ url_for('rate_game', game_name=game.Name) }}">
+    <label>Rate this game:</label>
+    <select name="rating">
+      <option value="1">1 ★</option>
+      <option value="2">2 ★</option>
+      <option value="3">3 ★</option>
+      <option value="4">4 ★</option>
+      <option value="5">5 ★</option>
+    </select>
+    <button type="submit">Submit Rating</button>
+  </form>
+</div>
+{% endblock %}
