@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Dashboard | College Sports</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .sport-card {
+            transition: transform 0.2s;
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .sport-card:hover {
+            transform: translateY(-5px);
+        }
+        .progress {
+            height: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Player Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-trophy-fill me-2"></i>Sports Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Rankings</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3">Welcome, <strong>John</strong></span>
+                    <img src="/static/images/user-avatar.png" width="35" height="35" class="rounded-circle" alt="User">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h2>Available Sports</h2>
+                <p class="text-muted">Register for upcoming events</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search sports...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sports Cards Grid -->
+        <div class="row g-4">
+            <!-- Example Basketball Card (Dynamic content from MongoDB) -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card sport-card h-100">
+                    <img src="/static/images/basketball.jpg" class="card-img-top" alt="Basketball">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Basketball</h5>
+                            <span class="badge bg-success">Open</span>
+                        </div>
+                        <p class="card-text text-muted small">Registration closes in 3 days</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-primary fw-bold">12/20 slots filled</span>
+                            <span class="text-muted small">Team event</span>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-success" style="width: 60%"></div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">Register Now</button>
+                            <button class="btn btn-outline-primary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Cricket Card -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card sport-card h-100">
+                    <img src="/static/images/cricket.jpg" class="card-img-top" alt="Cricket">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Cricket</h5>
+                            <span class="badge bg-warning text-dark">Limited</span>
+                        </div>
+                        <p class="card-text text-muted small">Only 2 slots remaining</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-primary fw-bold">18/20 slots filled</span>
+                            <span class="text-muted small">Team event</span>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-warning" style="width: 90%"></div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">Register Now</button>
+                            <button class="btn btn-outline-primary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Badminton Card -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card sport-card h-100">
+                    <img src="/static/images/badminton.jpg" class="card-img-top" alt="Badminton">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Badminton</h5>
+                            <span class="badge bg-danger">Closed</span>
+                        </div>
+                        <p class="card-text text-muted small">Registration ended yesterday</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-primary fw-bold">20/20 slots filled</span>
+                            <span class="text-muted small">Singles/Doubles</span>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-danger" style="width: 100%"></div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-secondary" disabled>Registration Closed</button>
+                            <button class="btn btn-outline-secondary">View Results</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h4>Your Registered Events</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Event</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Team</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Basketball Tournament</td>
+                                <td>15 Oct 2023</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                                <td>CS Eagles</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cricket League</td>
+                                <td>22 Oct 2023</td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

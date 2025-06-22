@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+        }
+        .approve-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .reject-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: none;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #007BFF;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <div class="tabs">
+        <button class="tab active" onclick="openTab(event, 'pending')">Pending Requests</button>
+        <button class="tab" onclick="openTab(event, 'current')">Current Coordinators</button>
+    </div>
+    
+    <div id="pending" class="tab-content active">
+        <h2>Pending Role Requests</h2>
+        <table id="pendingRequests">
+            <thead>
+                <tr>
+                    <th>Player ID</th>
+                    <th>Player Name</th>
+                    <th>Requested Role</th>
+                    <th>Date Requested</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Requests will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="current" class="tab-content">
+        <h2>Current Coordinators</h2>
+        <table id="currentCoordinators">
+            <thead>
+                <tr>
+                    <th>Player ID</th>
+                    <th>Player Name</th>
+                    <th>Role</th>
+                    <th>Date Assigned</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Current coordinators will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Simulated data - in a real app, this would come from a server
+        const pendingRequests = [
+            { id: 1, name: "Player 1", requestedRole: "coordinator", date: "2023-05-15" },
+            { id: 2, name: "Player 2", requestedRole: "assistant", date: "2023-05-16" },
+            { id: 3, name: "Player 3", requestedRole: "coordinator", date: "2023-05-17" }
+        ];
+        
+        const currentCoordinators = [
+            { id: 4, name: "Player 4", role: "coordinator", date: "2023-05-10" },
+            { id: 5, name: "Player 5", role: "assistant", date: "2023-05-12" }
+        ];
+
+        // Initialize tables
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPendingRequests();
+            renderCurrentCoordinators();
+        });
+
+        function renderPendingRequests() {
+            const tbody = document.querySelector('#pendingRequests tbody');
+            tbody.innerHTML = '';
+            
+            pendingRequests.forEach(request => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${request.id}</td>
+                    <td>${request.name}</td>
+                    <td>${request.requestedRole}</td>
+                    <td>${request.date}</td>
+                    <td>
+                        <button class="approve-btn" onclick="approveRequest(${request.id}, '${request.requestedRole}')">Approve</button>
+                        <button class="reject-btn" onclick="rejectRequest(${request.id})">Reject</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderCurrentCoordinators() {
+            const tbody = document.querySelector('#currentCoordinators tbody');
+            tbody.innerHTML = '';
+            
+            currentCoordinators.forEach(coordinator => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${coordinator.id}</td>
+                    <td>${coordinator.name}</td>
+                    <td>${coordinator.role}</td>
+                    <td>${coordinator.date}</td>
+                    <td>
+                        <button class="reject-btn" onclick="removeRole(${coordinator.id})">Remove Role</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function approveRequest(playerId, role) {
+            // In a real app, you would send this to the server
+            console.log(`Approved ${role} role for player ${playerId}`);
+            
+            // Find the request
+            const requestIndex = pendingRequests.findIndex(r => r.id === playerId);
+            if (requestIndex !== -1) {
+                const request = pendingRequests[requestIndex];
+                
+                // Move to current coordinators
+                currentCoordinators.push({
+                    id: request.id,
+                    name: request.name,
+                    role: request.requestedRole,
+                    date: new Date().toISOString().split('T')[0]
+                });
+                
+                // Remove from pending
+                pendingRequests.splice(requestIndex, 1);
+                
+                // Update tables
+                renderPendingRequests();
+                renderCurrentCoordinators();
+                
+                // In a real app, notify the player that their request was approved
+            }
+        }
+
+        function rejectRequest(playerId) {
+            // In a real app, you would send this to the server
+            console.log(`Rejected role request for player ${playerId}`);
+            
+            // Remove from pending
+            const requestIndex = pendingRequests.findIndex(r => r.id === playerId);
+            if (requestIndex !== -1) {
+                pendingRequests.splice(requestIndex, 1);
+                renderPendingRequests();
+                
+                // In a real app, notify the player that their request was rejected
+            }
+        }
+
+        function removeRole(playerId) {
+            // In a real app, you would send this to the server
+            console.log(`Removed role from player ${playerId}`);
+            
+            // Remove from current coordinators
+            const coordIndex = currentCoordinators.findIndex(c => c.id === playerId);
+            if (coordIndex !== -1) {
+                currentCoordinators.splice(coordIndex, 1);
+                renderCurrentCoordinators();
+                
+                // In a real app, notify the player that their role was removed
+            }
+        }
+
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

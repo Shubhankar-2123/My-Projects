@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .pending {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+        .approved {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0069D9;
+        }
+        button:disabled {
+            background-color: #6C757D;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Player Dashboard</h1>
+    <p>Welcome, <span id="playerName">Player 1</span>!</p>
+    
+    <div id="currentRole">
+        <h3>Your Current Role: <span id="roleDisplay">Player</span></h3>
+    </div>
+    
+    <div id="roleRequestSection">
+        <h3>Request a Special Role</h3>
+        <select id="roleSelect">
+            <option value="">Select a role to request</option>
+            <option value="coordinator">Coordinator</option>
+            <option value="assistant">Assistant Coordinator</option>
+        </select>
+        <button id="requestBtn">Request Role</button>
+    </div>
+    
+    <div id="requestStatus" class="status" style="display: none;">
+        <h3>Your Request Status</h3>
+        <p id="statusText"></p>
+        <button id="cancelRequestBtn">Cancel Request</button>
+    </div>
+
+    <script>
+        // Simulated player data
+        const player = {
+            id: 1,
+            name: "Player 1",
+            currentRole: "player",
+            requestedRole: "",
+            requestStatus: ""
+        };
+
+        // DOM elements
+        const roleSelect = document.getElementById('roleSelect');
+        const requestBtn = document.getElementById('requestBtn');
+        const requestStatus = document.getElementById('requestStatus');
+        const statusText = document.getElementById('statusText');
+        const cancelRequestBtn = document.getElementById('cancelRequestBtn');
+        const roleDisplay = document.getElementById('roleDisplay');
+
+        // Display current role
+        roleDisplay.textContent = player.currentRole;
+
+        // Check if player already has a pending request
+        if (player.requestedRole && player.requestStatus) {
+            showRequestStatus();
+        }
+
+        // Request button click handler
+        requestBtn.addEventListener('click', () => {
+            const selectedRole = roleSelect.value;
+            if (!selectedRole) {
+                alert('Please select a role first');
+                return;
+            }
+            
+            player.requestedRole = selectedRole;
+            player.requestStatus = "pending";
+            
+            // In a real app, you would send this to the server
+            console.log(`Requested ${selectedRole} role`);
+            
+            showRequestStatus();
+        });
+
+        // Cancel request button click handler
+        cancelRequestBtn.addEventListener('click', () => {
+            player.requestedRole = "";
+            player.requestStatus = "";
+            requestStatus.style.display = "none";
+            roleSelect.value = "";
+            
+            // In a real app, you would notify the server
+            console.log("Cancelled role request");
+        });
+
+        function showRequestStatus() {
+            requestStatus.style.display = "block";
+            statusText.textContent = `You have requested to be ${player.requestedRole}. Status: ${player.requestStatus}`;
+            
+            if (player.requestStatus === "pending") {
+                requestStatus.className = "status pending";
+            } else if (player.requestStatus === "approved") {
+                requestStatus.className = "status approved";
+            }
+            
+            roleSelect.value = "";
+        }
+
+        // Simulate receiving updates from server (in a real app, this would be via WebSocket or polling)
+        function simulateAdminApproval() {
+            setTimeout(() => {
+                if (player.requestStatus === "pending") {
+                    player.requestStatus = "approved";
+                    player.currentRole = player.requestedRole;
+                    roleDisplay.textContent = player.currentRole;
+                    showRequestStatus();
+                }
+            }, 10000); // Simulate admin approval after 10 seconds
+        }
+        
+        // Uncomment to test the approval flow
+        // simulateAdminApproval();
+    </script>
+</body>
+</html>

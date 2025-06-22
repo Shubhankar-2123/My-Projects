@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Welcome, {{ current_user.name }}!</h2>
+    
+    <!-- Upcoming Games -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5>Upcoming Games</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for game in games %}
+                <div class="col-md-4 mb-3">
+                    <div class="card game-card h-100">
+                        <div class="card-header bg-success text-white">
+                            {{ game.name }} ({{ game.type }})
+                        </div>
+                        <div class="card-body">
+                            <p>{{ game.description }}</p>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('games.details', game_id=game._id) }}" class="btn btn-sm btn-info">Details</a>
+                                <a href="{{ url_for('games.register', game_id=game._id) }}" class="btn btn-sm btn-primary">Register</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Registered Games -->
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h5>Your Registrations</h5>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reg in registered_games %}
+                    <tr>
+                        <td>{{ reg.game_name }}</td>
+                        <td>{{ reg.game_type }}</td>
+                        <td><span class="badge bg-warning">{{ reg.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

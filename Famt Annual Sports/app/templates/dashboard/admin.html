@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <h2 class="my-4">Admin Dashboard</h2>
+    
+    <!-- Stats Cards -->
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total Players</h5>
+                    <p class="card-text">{{ player_counts|sum }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Active Games</h5>
+                    <p class="card-text">{{ games|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department-wise Player Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Players by Department</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="deptChart" height="100"></canvas>
+        </div>
+    </div>
+
+    <!-- Games Management Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5>All Games</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Game Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in games %}
+                    <tr>
+                        <td>{{ game.name }}</td>
+                        <td>{{ game.type }}</td>
+                        <td><span class="badge bg-info">{{ game.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('games.edit', game_id=game._id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Chart.js for Department Data
+    const deptCtx = document.getElementById('deptChart').getContext('2d');
+    new Chart(deptCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ departments|tojson|safe }},
+            datasets: [{
+                label: 'Players',
+                data: {{ player_counts|tojson|safe }},
+                backgroundColor: '#4CAF50'
+            }]
+        }
+    });
+</script>
+{% endblock %}

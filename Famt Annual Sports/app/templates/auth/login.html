@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Login - College Sports App{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 text-center">
+                        <i class="bi bi-person-circle me-2"></i>
+                        User Login
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="mb-4">
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('auth.login') }}" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+                                <input 
+                                    type="email" 
+                                    class="form-control {{ 'is-invalid' if form.email.errors }}" 
+                                    id="email" 
+                                    name="email" 
+                                    placeholder="your@email.com"
+                                    required
+                                    value="{{ form.email.data or '' }}"
+                                >
+                            </div>
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.email.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+                                <input 
+                                    type="password" 
+                                    class="form-control {{ 'is-invalid' if form.password.errors }}" 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="••••••••"
+                                    required
+                                >
+                                <button 
+                                    class="btn btn-outline-secondary toggle-password" 
+                                    type="button"
+                                    data-target="password"
+                                >
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="mb-3 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="remember" 
+                                name="remember"
+                                {{ 'checked' if form.remember.data }}
+                            >
+                            <label class="form-check-label" for="remember">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                Login
+                            </button>
+                        </div>
+
+                        <!-- Links -->
+                        <div class="text-center">
+                            <a href="{{ url_for('auth.forgot_password') }}" class="text-decoration-none">
+                                Forgot Password?
+                            </a>
+                            <span class="mx-2">•</span>
+                            <a href="{{ url_for('auth.register') }}" class="text-decoration-none">
+                                Create Account
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Toggle password visibility
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const target = document.getElementById(this.dataset.target);
+        const icon = this.querySelector('i');
+        
+        if (target.type === 'password') {
+            target.type = 'text';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            target.type = 'password';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    });
+});
+
+// Auto-focus email field on page load
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('email')?.focus();
+});
+</script>
+{% endblock %}

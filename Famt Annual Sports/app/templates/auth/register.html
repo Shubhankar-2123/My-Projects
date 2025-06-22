@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Register - College Sports App{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0 text-center">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Create New Account
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="mb-4">
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <div class="row g-3">
+                            <!-- Name Field -->
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person-badge"></i>
+                                    </span>
+                                    <input 
+                                        type="text" 
+                                        class="form-control {{ 'is-invalid' if form.name.errors }}" 
+                                        id="name" 
+                                        name="name" 
+                                        placeholder="John Doe"
+                                        required
+                                        value="{{ form.name.data or '' }}"
+                                    >
+                                </div>
+                                {% if form.name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.name.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Registration Number -->
+                            <div class="col-md-6">
+                                <label for="reg_no" class="form-label">Registration Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-123"></i>
+                                    </span>
+                                    <input 
+                                        type="text" 
+                                        class="form-control {{ 'is-invalid' if form.reg_no.errors }}" 
+                                        id="reg_no" 
+                                        name="reg_no" 
+                                        placeholder="CS20230001"
+                                        required
+                                        value="{{ form.reg_no.data or '' }}"
+                                    >
+                                </div>
+                                {% if form.reg_no.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.reg_no.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Department -->
+                            <div class="col-md-6">
+                                <label for="department" class="form-label">Department</label>
+                                <select 
+                                    class="form-select {{ 'is-invalid' if form.department.errors }}" 
+                                    id="department" 
+                                    name="department" 
+                                    required
+                                >
+                                    <option value="" disabled selected>Select Department</option>
+                                    <option value="CS" {% if form.department.data == 'CS' %}selected{% endif %}>Computer Science</option>
+                                    <option value="ECE" {% if form.department.data == 'ECE' %}selected{% endif %}>Electronics</option>
+                                    <option value="ME" {% if form.department.data == 'ME' %}selected{% endif %}>Mechanical</option>
+                                </select>
+                                {% if form.department.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.department.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope-at"></i>
+                                    </span>
+                                    <input 
+                                        type="email" 
+                                        class="form-control {{ 'is-invalid' if form.email.errors }}" 
+                                        id="email" 
+                                        name="email" 
+                                        placeholder="your@college.edu"
+                                        required
+                                        value="{{ form.email.data or '' }}"
+                                    >
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.email.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input 
+                                        type="password" 
+                                        class="form-control {{ 'is-invalid' if form.password.errors }}" 
+                                        id="password" 
+                                        name="password" 
+                                        placeholder="••••••••"
+                                        required
+                                        pattern=".{8,}"
+                                        title="8 characters minimum"
+                                    >
+                                    <button 
+                                        class="btn btn-outline-secondary toggle-password" 
+                                        type="button"
+                                        data-target="password"
+                                    >
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    Minimum 8 characters
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.password.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="col-md-6">
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </span>
+                                    <input 
+                                        type="password" 
+                                        class="form-control {{ 'is-invalid' if form.confirm_password.errors }}" 
+                                        id="confirm_password" 
+                                        name="confirm_password" 
+                                        placeholder="••••••••"
+                                        required
+                                    >
+                                </div>
+                                {% if form.confirm_password.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.confirm_password.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Terms Agreement -->
+                        <div class="my-4 form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input {{ 'is-invalid' if form.agree_terms.errors }}" 
+                                id="agree_terms" 
+                                name="agree_terms"
+                                required
+                            >
+                            <label class="form-check-label" for="agree_terms">
+                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a>
+                            </label>
+                            {% if form.agree_terms.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.agree_terms.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Register Account
+                            </button>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center">
+                            Already have an account? 
+                            <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+                                Login Here
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms of Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                {% include "auth/terms_text.html" %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Toggle password visibility
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const target = document.getElementById(this.dataset.target);
+        const icon = this.querySelector('i');
+        
+        if (target.type === 'password') {
+            target.type = 'text';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            target.type = 'password';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    });
+});
+
+// Password strength indicator (optional)
+document.getElementById('password')?.addEventListener('input', function() {
+    // Add strength meter logic here
+});
+</script>
+{% endblock %}
